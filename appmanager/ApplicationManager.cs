@@ -12,33 +12,35 @@ namespace mantis_tests
 {
     public class ApplicationManager
     {
-        protected IWebDriver driver;
         protected string baseURL;
 
-        protected LoginHelper loginHelper;
-        protected NavigationHelper navigator;
-        protected ManagementMenuHelper managementMenuHelper;
-        protected ProjectManagementHelper projectManagementHelper;
+        public IWebDriver Driver { get; set; }
+        public LoginHelper Auth { get; set; }
+        public NavigationHelper Navigator { get; set; }
+        public ManagementMenuHelper ManagementMenu { get; set; }
+        public ProjectManagementHelper ProjectManagement { get; set; }
+        public APIHelper API { get; set; }
 
         private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
         public ApplicationManager()
         {
-            driver = new FirefoxDriver();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            Driver = new FirefoxDriver();
+            Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
             baseURL = "http://localhost/mantisbt-2.24.3/";
 
-            loginHelper = new LoginHelper(this);
-            navigator = new NavigationHelper(this, baseURL);
-            managementMenuHelper = new ManagementMenuHelper(this);
-            projectManagementHelper = new ProjectManagementHelper(this);
+            Auth = new LoginHelper(this);
+            Navigator = new NavigationHelper(this, baseURL);
+            ManagementMenu = new ManagementMenuHelper(this);
+            ProjectManagement = new ProjectManagementHelper(this);
+            API = new APIHelper(this);
         }
 
         ~ApplicationManager()
         {
             try
             {
-                driver.Quit();
+                Driver.Quit();
             }
             catch(Exception)
             {
@@ -54,44 +56,6 @@ namespace mantis_tests
                 app.Value = newInstance;
             }
             return app.Value;
-        }
-        public IWebDriver Driver
-        {
-            get
-            {
-                return driver;
-            }
-        }
-        public LoginHelper Auth
-        {
-            get
-            {
-                return loginHelper;
-            }
-        }
-
-        public NavigationHelper Navigator
-        {
-            get
-            {
-                return navigator;
-            }
-        }
-
-        public ManagementMenuHelper ManagementMenu
-        {
-            get
-            {
-                return managementMenuHelper;
-            }
-        }
-
-        public ProjectManagementHelper ProjectManagement
-        {
-            get
-            {
-                return projectManagementHelper;
-            }
         }
     }
 }

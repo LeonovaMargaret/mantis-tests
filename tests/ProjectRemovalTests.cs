@@ -15,6 +15,8 @@ namespace mantis_tests
         {
             int removedIndex = 0;
 
+            AccountData account = new AccountData("administrator", "root");
+
             if (!app.ProjectManagement.IsProjectExists(removedIndex))
             {
                 ProjectData project = new ProjectData("TestRemovalName123")
@@ -24,14 +26,15 @@ namespace mantis_tests
                     ViewState = "50",
                     Description = "TestRemovalDescription"
                 };
-                app.ProjectManagement.Create(project);
+                app.API.CreateNewProject(account, project);
             }
 
-            List<ProjectData> oldProjects = ProjectData.GetAll();
-            
+            List<ProjectData> oldProjects = APIHelper.GetAllProjects(account);
+
             app.ProjectManagement.Remove(oldProjects[removedIndex]);
 
-            List<ProjectData> newProjects = ProjectData.GetAll();
+            List<ProjectData> newProjects = APIHelper.GetAllProjects(account);
+
             oldProjects.RemoveAt(removedIndex);
             oldProjects.Sort();
             newProjects.Sort();

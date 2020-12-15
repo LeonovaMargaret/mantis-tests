@@ -13,9 +13,11 @@ namespace mantis_tests
         [Test]
         public void ProjectCreationTest()
         {
-            List<ProjectData> oldProjects = ProjectData.GetAll();
+            //List<ProjectData> oldProjects = ProjectData.GetAll();
+            AccountData account = new AccountData("administrator", "root");
+            List<ProjectData> oldProjects = APIHelper.GetAllProjects(account);
 
-            ProjectData project = new ProjectData("TestName")
+            ProjectData project = new ProjectData("TestName123")
             {
                 Status = "10",
                 InheritGlobal = "0",
@@ -25,7 +27,9 @@ namespace mantis_tests
 
             app.ProjectManagement.Create(project);
 
-            List<ProjectData> newProjects = ProjectData.GetAll();
+            //List<ProjectData> newProjects = ProjectData.GetAll();
+            List<ProjectData> newProjects = APIHelper.GetAllProjects(account);
+
             oldProjects.Add(project);
             oldProjects.Sort();
             newProjects.Sort();
